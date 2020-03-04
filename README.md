@@ -1,6 +1,8 @@
 # badges
 GitHub contributors badges service.
 
+[![GoReport](https://goreportcard.com/badge/github.com/wuhan005/badges)](https://goreportcard.com/report/github.com/wuhan005/badges)
+
 ## Demo
 Deployed on Heroku
 

@@ -26,6 +26,9 @@ func downloadFile(url string, path string) (string, error) {
 
 	path = filepath.Join(path, filepath.Base(url))
 	file, err := os.Create(path)
+	if err != nil {
+		return "", err
+	}
 
 	_, err = io.Copy(file, res.Body)
 	defer file.Close()
