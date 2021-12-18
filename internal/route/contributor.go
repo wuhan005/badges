@@ -5,23 +5,25 @@ import (
 	"image/color"
 	"image/png"
 	"math"
+	"net/http"
+	"os"
 	"path"
 	"strconv"
 
 	"github.com/disintegration/imaging"
-	"github.com/gin-gonic/gin"
 
 	"github.com/wuhan005/badges/github"
-	"github.com/wuhan005/badges/util"
+	"github.com/wuhan005/badges/internal/context"
+	"github.com/wuhan005/badges/internal/fileutil"
 )
 
-func ContributorsBadgeHandler(c *gin.Context) {
-	owner := c.Param("owner")
-	repo := c.Param("repo")
+func ContributorsBadgeHandler(ctx context.Context) {
+	owner := ctx.Param("owner")
+	repo := ctx.Param("repo")
 
 	contributors, err := github.GetContributors(owner, repo)
 	if err != nil {
-		c.String(500, "Failed to get contributors: %v", err)
+		ctx.String(http.StatusInternalServerError, "Failed to get contributors: %v", err)
 		return
 	}
 
@@ -36,18 +38,18 @@ func ContributorsBadgeHandler(c *gin.Context) {
 	background := imaging.New(width, line*(imgSize+padding), color.NRGBA{})
 
 	for index, contributor := range contributors {
-		// Download image
-		imagePath := path.Join("/tmp", strconv.Itoa(int(contributor.GetID())))
-		err := util.DownloadFile(contributor.GetAvatarURL(), imagePath)
+		// Download image to temporary path.
+		imagePath := path.Join(os.TempDir(), strconv.Itoa(int(contributor.GetID())))
+		err := fileutil.DownloadFile(contributor.GetAvatarURL(), imagePath)
 		if err != nil {
-			c.String(500, "Failed to download contributor's avatar: %v", err)
+			ctx.String(http.StatusInternalServerError, "Failed to download contributor's avatar: %v", err)
 			return
 		}
 
 		// Load image file
 		img, err := imaging.Open(imagePath)
 		if err != nil {
-			c.String(500, "Failed to load image file: %v", err)
+			ctx.String(http.StatusInternalServerError, "Failed to load image file: %v", err)
 			return
 		}
 
@@ -61,9 +63,9 @@ func ContributorsBadgeHandler(c *gin.Context) {
 	}
 
 	encoder := png.Encoder{}
-	err = encoder.Encode(c.Writer, background)
+	err = encoder.Encode(ctx.ResponseWriter(), background)
 	if err != nil {
-		c.String(500, "Failed to encode image: %v", err)
+		ctx.String(http.StatusInternalServerError, "Failed to encode image: %v", err)
 		return
 	}
 }

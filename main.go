@@ -1,19 +1,21 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/flamego/flamego"
 
-	"github.com/wuhan005/badges/route"
+	"github.com/wuhan005/badges/internal/context"
+	"github.com/wuhan005/badges/internal/route"
 )
 
 func main() {
-	r := gin.Default()
+	f := flamego.Classic()
+	f.Use(context.Contexter())
 
-	r.GET("/repos/:owner/:repo/contributors", route.ContributorsBadgeHandler)
+	f.Get("/repos/{owner}/{repo}/contributors", route.ContributorsBadgeHandler)
 
-	r.NoRoute(func(c *gin.Context) {
-		c.Redirect(302, "https://api.github.com/")
+	f.NotFound(func(ctx flamego.Context) {
+		ctx.Redirect("https://api.github.com/")
 	})
 
-	panic(r.Run())
+	f.Run()
 }
