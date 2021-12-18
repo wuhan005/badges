@@ -11,11 +11,7 @@ func main() {
 	f := flamego.Classic()
 	f.Use(context.Contexter())
 
-	f.Get("/repos/{owner}/{repo}/contributors", route.ContributorsBadgeHandler)
-
-	f.NotFound(func(ctx flamego.Context) {
-		ctx.Redirect("https://api.github.com/")
-	})
+	f.Get("/", route.ContributorsBadgeHandler)
 
 	f.Run()
 }
