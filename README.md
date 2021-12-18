@@ -6,9 +6,9 @@ GitHub's contributors badges service.
 
 Deployed on Heroku
 
-https://github-badges-services.herokuapp.com/repos/vidar-team/Cardinal/contributors
+https://github-badges-services.herokuapp.com/?repos=flamego/flamego&repos=go-macaron/macaron
 
-![](https://github-badges-services.herokuapp.com/repos/vidar-team/Cardinal/contributors)
+![](https://github-badges-services.herokuapp.com/?repos=flamego/flamego&repos=go-macaron/macaron)
 
 ## License
 
