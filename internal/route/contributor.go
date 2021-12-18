@@ -145,8 +145,8 @@ func ContributorsBadgeHandler(ctx context.Context) {
 		img = imaging.Resize(img, imgSize, imgSize, imaging.Lanczos)
 
 		// Paste image into background
-		y := int(math.Floor(float64((index)/perLine))) * (imgSize + padding)
-		x := (index - int(math.Floor(float64((index)/perLine)))*perLine) * (imgSize + padding)
+		y := int(math.Floor(float64(index)/float64(perLine))) * (imgSize + padding)
+		x := (index - int(math.Floor(float64(index)/float64(perLine)))*perLine) * (imgSize + padding)
 		background = imaging.Paste(background, img, image.Pt(x, y))
 	}
 
