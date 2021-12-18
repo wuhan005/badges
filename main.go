@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"strconv"
 
 	"github.com/flamego/flamego"
 
@@ -15,6 +16,9 @@ func main() {
 
 	f.Get("/", route.ContributorsBadgeHandler)
 
-	port := os.Getenv("PORT")
+	port, err := strconv.Atoi(os.Getenv("PORT"))
+	if err != nil {
+		panic("port must be an integer")
+	}
 	f.Run(port)
 }
