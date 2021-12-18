@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/flamego/flamego"
 
 	"github.com/wuhan005/badges/internal/context"
@@ -13,5 +15,6 @@ func main() {
 
 	f.Get("/", route.ContributorsBadgeHandler)
 
-	f.Run()
+	port := os.Getenv("PORT")
+	f.Run(port)
 }
